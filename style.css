@@ -38,6 +38,7 @@ h1 {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.2s;
+  text-align: center;
 }
 
 .figure:hover {
@@ -50,9 +51,10 @@ h1 {
 }
 
 .figure p {
-  color: #000;
+  color: #fff;
   margin: 8px 0 0 0;
   font-weight: bold;
+
 }
 
 .zoom-box {
