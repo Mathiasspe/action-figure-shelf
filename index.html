@@ -66,7 +66,7 @@
     }
 
     .zoom-box {
-      align-self: flex-start; /* 🛠️ Fix for top alignment */
+      align-self: flex-start;
       width: 400px;
       background: #ffffff22;
       border-radius: 12px;
@@ -84,15 +84,18 @@
       border: none;
       display: block;
       margin: 0 auto;
+      cursor: zoom-in;
     }
 
-    .zoom-box img:hover {
-      transform: scale(1.03);
+    .zoom-box img.zoomed-in {
+      transform: scale(1.7);
+      cursor: zoom-out;
     }
 
     #zoomTitle {
-      font-size: 1.5em;
-      font-weight: bold;
+      font-family: 'Bangers', cursive;
+      font-size: 1.8em;
+      font-weight: normal;
       color: #fff;
       margin-bottom: 10px;
     }
@@ -126,9 +129,18 @@
 
   <script>
     function zoomImage(src, title) {
-      document.getElementById("zoomedImage").src = src;
+      const img = document.getElementById("zoomedImage");
+      img.classList.remove("zoomed-in"); // Reset zoom on new image
+      img.src = src;
       document.getElementById("zoomTitle").textContent = title;
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const zoomedImage = document.getElementById("zoomedImage");
+      zoomedImage.addEventListener("click", () => {
+        zoomedImage.classList.toggle("zoomed-in");
+      });
+    });
   </script>
 </body>
 </html>
