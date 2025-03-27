@@ -3,40 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <title>My Action Figure Shelf</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>My Action Figure Shelf</h1>
-  <div class="shelf">
-    <div class="figure" onclick="zoomImage('images/Berg_action.png')">
-      <img src="images/Berg_action.png" alt="Berg"><p>The Wench</p>
+  <div class="container">
+    <div class="shelf">
+      <div class="figure" onclick="zoomImage('images/Berg_action.png', 'The Wench')">
+        <img src="images/Berg_action.png" alt="Berg"><p>The Wench</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/The_dad.png', 'The Dad')">
+        <img src="images/The_dad.png" alt="The Dad"><p>The Dad</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/The_bulge.png', 'The Bulge')">
+        <img src="images/The_bulge.png" alt="The Bulge"><p>The Bulge</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/Knut_Klut.png', 'The Klut')">
+        <img src="images/Knut_Klut.png" alt="The Klut"><p>The Klut</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/The_grinder.png', 'The Grinder')">
+        <img src="images/The_grinder.png" alt="The Grinder"><p>The Grinder</p>
+      </div>
     </div>
-    <div class="figure" onclick="zoomImage('images/car_vol2.png')">
-      <img src="images/car_vol2.png" alt="Car Vol 2"><p>The dad</p>
+    <div class="zoom-box" id="zoomBox">
+      <p id="zoomTitle">Click a figure to view!</p>
+      <img id="zoomedImage" src="" alt="">
     </div>
-    <div class="figure" onclick="zoomImage('images/Henke_action.png')">
-      <img src="images/Henke_action.png" alt="Henke"><p>The Bulge</p>
-    </div>
-    <div class="figure" onclick="zoomImage('images/KNut_action.png')">
-      <img src="images/KNut_action.png" alt="Knut"><p>The Klut</p>
-    </div>
-    <div class="figure" onclick="zoomImage('images/Morsund_action.png')">
-      <img src="images/Morsund_action.png" alt="Morsund"><p>The grinder</p>
-    </div>
-  </div>
-
-  <div id="overlay" onclick="closeZoom()">
-    <img id="zoomedImage" src="">
   </div>
 
   <script>
-    function zoomImage(src) {
+    function zoomImage(src, title) {
       document.getElementById("zoomedImage").src = src;
-      document.getElementById("overlay").style.display = "flex";
-    }
-
-    function closeZoom() {
-      document.getElementById("overlay").style.display = "none";
+      document.getElementById("zoomTitle").textContent = title;
     }
   </script>
 </body>
