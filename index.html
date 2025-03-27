@@ -20,7 +20,7 @@
       letter-spacing: 2px;
       color: #ffe600;
       text-shadow: 3px 3px #000;
-      animation: flicker 2s infinite alternate;
+      animation: popIn 0.8s ease-out;
     }
 
     .container {
@@ -46,22 +46,16 @@
       cursor: pointer;
       text-align: center;
       animation: fadeIn 1s ease-in-out;
-      transition: transform 0.2s, box-shadow 0.3s;
-      border: 2px solid transparent;
+      transition: transform 0.2s;
     }
 
     .figure:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 10px 3px #ffe600;
-      border-color: #fff700;
     }
 
     .figure img {
       width: 100%;
       border-radius: 6px;
-      display: block;
-      border: none;
-      box-shadow: none;
     }
 
     .figure p {
@@ -88,9 +82,6 @@
       box-shadow: 0 0 20px #000;
       margin-top: 10px;
       transition: transform 0.3s ease;
-      border: none;
-      display: block;
-      animation: bounceIn 0.4s ease;
     }
 
     .zoom-box img:hover {
@@ -105,13 +96,9 @@
       animation: fadeIn 0.5s ease-in-out;
     }
 
-    @keyframes flicker {
-      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-        opacity: 1;
-      }
-      20%, 24%, 55% {
-        opacity: 0.7;
-      }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     @keyframes fadeIn {
@@ -122,20 +109,6 @@
     @keyframes slideIn {
       from { opacity: 0; transform: translateX(30px); }
       to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes bounceIn {
-      0% {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      60% {
-        transform: scale(1.05);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-      }
     }
   </style>
 </head>
@@ -168,10 +141,11 @@
   <script>
     function zoomImage(src, title) {
       const zoomedImage = document.getElementById("zoomedImage");
-      zoomedImage.classList.remove("bounceIn");
-      void zoomedImage.offsetWidth; // trigger reflow
-      zoomedImage.src = src;
-      zoomedImage.classList.add("bounceIn");
+      zoomedImage.style.opacity = 0;
+      setTimeout(() => {
+        zoomedImage.src = src;
+        zoomedImage.style.opacity = 1;
+      }, 150);
       document.getElementById("zoomTitle").textContent = title;
     }
   </script>
