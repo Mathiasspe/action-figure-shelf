@@ -8,11 +8,36 @@
 <body>
   <h1>My Action Figure Shelf</h1>
   <div class="shelf">
-    <div class="figure"><img src="images/Berg_action.png" alt="Berg"><p>Berg</p></div>
-    <div class="figure"><img src="images/car_vol2.png" alt="Car Vol 2"><p>Car Vol 2</p></div>
-    <div class="figure"><img src="images/Henke_action.png" alt="Henke"><p>Henke</p></div>
-    <div class="figure"><img src="images/KNut_action.png" alt="Knut"><p>Knut</p></div>
-    <div class="figure"><img src="images/Morsund_action.png" alt="Morsund"><p>Morsund</p></div>
+    <div class="figure" onclick="zoomImage('images/Berg_action.png')">
+      <img src="images/Berg_action.png" alt="Berg"><p>The Wench</p>
+    </div>
+    <div class="figure" onclick="zoomImage('images/car_vol2.png')">
+      <img src="images/car_vol2.png" alt="Car Vol 2"><p>The dad</p>
+    </div>
+    <div class="figure" onclick="zoomImage('images/Henke_action.png')">
+      <img src="images/Henke_action.png" alt="Henke"><p>The Bulge</p>
+    </div>
+    <div class="figure" onclick="zoomImage('images/KNut_action.png')">
+      <img src="images/KNut_action.png" alt="Knut"><p>The Klut</p>
+    </div>
+    <div class="figure" onclick="zoomImage('images/Morsund_action.png')">
+      <img src="images/Morsund_action.png" alt="Morsund"><p>The grinder</p>
+    </div>
   </div>
+
+  <div id="overlay" onclick="closeZoom()">
+    <img id="zoomedImage" src="">
+  </div>
+
+  <script>
+    function zoomImage(src) {
+      document.getElementById("zoomedImage").src = src;
+      document.getElementById("overlay").style.display = "flex";
+    }
+
+    function closeZoom() {
+      document.getElementById("overlay").style.display = "none";
+    }
+  </script>
 </body>
 </html>
