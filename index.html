@@ -90,11 +90,6 @@
       cursor: zoom-in;
     }
 
-    .zoom-box img.zoomed-in {
-      transform: scale(1.7);
-      cursor: zoom-out;
-    }
-
     #zoomTitle {
       font-family: 'Bangers', cursive;
       font-size: 1.8em;
@@ -119,18 +114,41 @@
     #editionToggle:hover {
       background-color: #fff34d;
     }
+
+    /* NEW: Fullscreen zoom overlay */
+    #fullscreenOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      cursor: zoom-out;
+    }
+
+    #fullscreenOverlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #000;
+    }
   </style>
 </head>
 <body>
   <h1>Action Gutta</h1>
   <div class="container">
     <div class="zoom-box" id="zoomBox">
-  <p id="zoomTitle">Klikk for zoom!</p>
-  <div id="zoomWrapper">
-    <img id="zoomedImage" src="" alt="">
-  </div>
-  <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
-</div>
+      <p id="zoomTitle">Klikk for zoom!</p>
+      <div id="zoomWrapper">
+        <img id="zoomedImage" src="" alt="">
+      </div>
+      <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
+    </div>
+
     <div class="shelf">
       <div class="figure" onclick="zoomImage('images/Berg_action.png', 'The Wench')">
         <img src="images/Berg_action.png" alt="The Wench"><p>The Wench</p>
@@ -153,11 +171,15 @@
       <div class="figure" onclick="zoomImage('images/Petter_Viking.png', 'The Viking')">
         <img src="images/Petter_Viking.png" alt="The Viking"><p>The Viking</p>
       </div>
-      <div class="figure" onclick="zoomImage('images/Micke_action.png', 'The Destroyer')">
+      <div class="figure" onclick="zoomImage('images/Micke_action.png', 'The Micke')">
         <img src="images/Micke_action.png" alt="The Micke"><p>The Micke</p>
       </div>
     </div>
-    
+  </div>
+
+  <!-- Fullscreen Zoom Overlay -->
+  <div id="fullscreenOverlay" onclick="closeFullscreen()">
+    <img id="fullscreenImage" src="" alt="">
   </div>
 
   <script>
@@ -168,7 +190,6 @@
       const img = document.getElementById("zoomedImage");
       const toggle = document.getElementById("editionToggle");
 
-      img.classList.remove("zoomed-in");
       img.src = src;
       document.getElementById("zoomTitle").textContent = title;
       currentFigure = title;
@@ -188,7 +209,7 @@
       const toggle = document.getElementById("editionToggle");
 
       if (!showingNosejob) {
-        img.src = "images/The_dad_Hospital.png"; // double-check spelling
+        img.src = "images/The_dad_Hospital.png";
         title.textContent = "The Dad: Nosejob Edition";
         toggle.textContent = "Back to original edition";
       } else {
@@ -200,13 +221,20 @@
       showingNosejob = !showingNosejob;
     }
 
-  document.addEventListener("DOMContentLoaded", () => {
-  const zoomedImage = document.getElementById("zoomedImage");
+    document.addEventListener("DOMContentLoaded", () => {
+      const zoomedImage = document.getElementById("zoomedImage");
+      zoomedImage.addEventListener("click", () => {
+        const overlay = document.getElementById("fullscreenOverlay");
+        const fullImg = document.getElementById("fullscreenImage");
 
-  zoomedImage.addEventListener("click", () => {
-    zoomedImage.classList.toggle("fullscreen-zoom");
-  });
-});
+        fullImg.src = zoomedImage.src;
+        overlay.style.display = "flex";
+      });
+    });
+
+    function closeFullscreen() {
+      document.getElementById("fullscreenOverlay").style.display = "none";
+    }
   </script>
 </body>
 </html>
