@@ -99,43 +99,96 @@
       color: #fff;
       margin-bottom: 10px;
     }
+
+    #editionToggle {
+      margin-top: 15px;
+      background-color: #ffe600;
+      color: #000;
+      font-family: 'Bangers', cursive;
+      font-size: 1em;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #editionToggle:hover {
+      background-color: #fff34d;
+    }
   </style>
 </head>
 <body>
   <h1>Action Gutta</h1>
   <div class="container">
     <div class="shelf">
-  <div class="figure" onclick="zoomImage('images/Berg_action.png', 'The Wench')">
-    <img src="images/Berg_action.png" alt="The Wench"><p>The Wench</p>
-  </div>
-  <div class="figure" onclick="zoomImage('images/car_vol2.png', 'The Dad')">
-    <img src="images/car_vol2.png" alt="The Dad"><p>The Dad</p>
-  </div>
-  <div class="figure" onclick="zoomImage('images/Henke_action.png', 'The Bulge')">
-    <img src="images/Henke_action.png" alt="The Bulge"><p>The Bulge</p>
-  </div>
-  <div class="figure" onclick="zoomImage('images/KNut_action.png', 'The Klut')">
-    <img src="images/KNut_action.png" alt="The Klut"><p>The Klut</p>
-  </div>
-  <div class="figure" onclick="zoomImage('images/Morsund_action.png', 'The Grinder')">
-    <img src="images/Morsund_action.png" alt="The Grinder"><p>The Grinder</p>
-  </div>
-  <div class="figure" onclick="zoomImage('images/Micke_action.png', 'The Micke')">
-    <img src="images/Micke_action.png" alt="The Micke"><p>The Micke</p>
-  </div>
-</div>
+      <div class="figure" onclick="zoomImage('images/Berg_action.png', 'The Wench')">
+        <img src="images/Berg_action.png" alt="The Wench"><p>The Wench</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/car_vol2.png', 'The Dad')">
+        <img src="images/car_vol2.png" alt="The Dad"><p>The Dad</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/Henke_action.png', 'The Bulge')">
+        <img src="images/Henke_action.png" alt="The Bulge"><p>The Bulge</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/KNut_action.png', 'The Klut')">
+        <img src="images/KNut_action.png" alt="The Klut"><p>The Klut</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/Morsund_action.png', 'The Grinder')">
+        <img src="images/Morsund_action.png" alt="The Grinder"><p>The Grinder</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/The_analyst_Hasse.png', 'The Analyst')">
+        <img src="images/The_analyst_Hasse.png" alt="The Analyst"><p>The Analyst</p>
+      </div>
+      <div class="figure" onclick="zoomImage('images/Petter_Viking.png', 'The Viking')">
+        <img src="images/Petter_Viking.png" alt="The Viking"><p>The Viking</p>
+      </div>
+    </div>
     <div class="zoom-box" id="zoomBox">
       <p id="zoomTitle">Klikk for zoom!</p>
       <img id="zoomedImage" src="" alt="">
+      <button id="editionToggle" onclick="toggleEdition()">View Nosejob Edition</button>
     </div>
   </div>
 
   <script>
+    let showingNosejob = false;
+    let currentFigure = "";
+
     function zoomImage(src, title) {
       const img = document.getElementById("zoomedImage");
-      img.classList.remove("zoomed-in"); // Reset zoom on new image
+      const toggle = document.getElementById("editionToggle");
+
+      img.classList.remove("zoomed-in");
       img.src = src;
       document.getElementById("zoomTitle").textContent = title;
+      currentFigure = title;
+      showingNosejob = false;
+
+      if (title === "The Dad") {
+        toggle.style.display = "inline-block";
+        toggle.textContent = "View Nosejob Edition";
+      } else {
+        toggle.style.display = "none";
+      }
+    }
+
+    function toggleEdition() {
+      const img = document.getElementById("zoomedImage");
+      const title = document.getElementById("zoomTitle");
+      const toggle = document.getElementById("editionToggle");
+
+      if (!showingNosejob) {
+        img.src = "images/The_dad_Hopsital.png";
+        title.textContent = "The Dad: Nosejob Edition";
+        toggle.textContent = "Back to original edition";
+      } else {
+        img.src = "images/car_vol2.png";
+        title.textContent = "The Dad";
+        toggle.textContent = "View Nosejob Edition";
+      }
+
+      showingNosejob = !showingNosejob;
     }
 
     document.addEventListener("DOMContentLoaded", () => {
