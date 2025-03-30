@@ -125,6 +125,11 @@
 <body>
   <h1>Action Gutta</h1>
   <div class="container">
+    <div class="zoom-box" id="zoomBox">
+      <p id="zoomTitle">Klikk for zoom!</p>
+      <img id="zoomedImage" src="" alt="">
+      <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
+    </div>
     <div class="shelf">
       <div class="figure" onclick="zoomImage('images/Berg_action.png', 'The Wench')">
         <img src="images/Berg_action.png" alt="The Wench"><p>The Wench</p>
@@ -154,11 +159,7 @@
         <img src="images/Micke_action.png" alt="The Micke"><p>The Micke</p>
       </div>
     </div>
-    <div class="zoom-box" id="zoomBox">
-      <p id="zoomTitle">Klikk for zoom!</p>
-      <img id="zoomedImage" src="" alt="">
-      <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
-    </div>
+    
   </div>
 
   <script>
