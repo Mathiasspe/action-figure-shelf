@@ -4,139 +4,7 @@
   <meta charset="UTF-8">
   <title>Action Gutta</title>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: #2e8ca9;
-      color: white;
-    }
-
-    h1 {
-      font-family: 'Bangers', cursive;
-      font-size: 48px;
-      text-align: center;
-      padding: 20px 0;
-      letter-spacing: 2px;
-      color: #ffe600;
-      text-shadow: 3px 3px #000;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 20px;
-      gap: 60px;
-      max-width: 1400px;
-      margin: auto;
-      flex-wrap: nowrap;
-    }
-
-    .shelf {
-      display: grid;
-      grid-template-columns: 150px 150px;
-      gap: 20px;
-      max-height: 90vh;
-      padding-right: 10px;
-    }
-
-    .figure {
-      background: transparent;
-      padding: 0;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.2s;
-    }
-
-    .figure:hover {
-      transform: scale(1.1);
-    }
-
-    .figure img {
-      width: 100%;
-      border-radius: 6px;
-      display: block;
-      border: none;
-      box-shadow: none;
-    }
-
-    .figure p {
-      color: #fff;
-      margin: 8px 0 0 0;
-      font-weight: bold;
-    }
-
-    .zoom-box {
-      align-self: flex-start;
-      width: 400px;
-      background: #ffffff22;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    .zoom-box img {
-      max-width: 100%;
-      max-height: 500px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #000;
-      transition: transform 0.3s ease;
-      border: none;
-      display: block;
-      margin: 0 auto;
-      cursor: zoom-in;
-    }
-
-    #zoomTitle {
-      font-family: 'Bangers', cursive;
-      font-size: 1.8em;
-      font-weight: normal;
-      color: #fff;
-      margin-bottom: 10px;
-    }
-
-    #editionToggle {
-      margin-top: 15px;
-      background-color: #ffe600;
-      color: #000;
-      font-family: 'Bangers', cursive;
-      font-size: 1em;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      display: none;
-    }
-
-    #editionToggle:hover {
-      background-color: #fff34d;
-    }
-
-    /* NEW: Fullscreen zoom overlay */
-    #fullscreenOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      cursor: zoom-out;
-    }
-
-    #fullscreenOverlay img {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 12px;
-      box-shadow: 0 0 30px #000;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Action Gutta</h1>
@@ -177,11 +45,6 @@
     </div>
   </div>
 
-  <!-- Fullscreen Zoom Overlay -->
-  <div id="fullscreenOverlay" onclick="closeFullscreen()">
-    <img id="fullscreenImage" src="" alt="">
-  </div>
-
   <script>
     let showingNosejob = false;
     let currentFigure = "";
@@ -190,12 +53,13 @@
       const img = document.getElementById("zoomedImage");
       const toggle = document.getElementById("editionToggle");
 
+      img.classList.remove("fullscreen-zoom");
       img.src = src;
       document.getElementById("zoomTitle").textContent = title;
       currentFigure = title;
       showingNosejob = false;
 
-      if (title === "The Dad") {
+      if (title === "The Dad" || title === "The Viking") {
         toggle.style.display = "inline-block";
         toggle.textContent = "View Special Edition";
       } else {
@@ -208,33 +72,39 @@
       const title = document.getElementById("zoomTitle");
       const toggle = document.getElementById("editionToggle");
 
-      if (!showingNosejob) {
-        img.src = "images/The_dad_Hospital.png";
-        title.textContent = "The Dad: Nosejob Edition";
-        toggle.textContent = "Back to original edition";
-      } else {
-        img.src = "images/car_vol2.png";
-        title.textContent = "The Dad";
-        toggle.textContent = "View Special Edition";
+      if (currentFigure === "The Dad") {
+        if (!showingNosejob) {
+          img.src = "images/The_dad_Hospital.png";
+          title.textContent = "The Dad: Nosejob Edition";
+          toggle.textContent = "Back to original edition";
+        } else {
+          img.src = "images/car_vol2.png";
+          title.textContent = "The Dad";
+          toggle.textContent = "View Special Edition";
+        }
+        showingNosejob = !showingNosejob;
       }
 
-      showingNosejob = !showingNosejob;
+      else if (currentFigure === "The Viking") {
+        if (!showingNosejob) {
+          img.src = "images/Petter_Marbz.png";
+          title.textContent = "The Viking: Marbz Edition";
+          toggle.textContent = "Back to original edition";
+        } else {
+          img.src = "images/Petter_Viking.png";
+          title.textContent = "The Viking";
+          toggle.textContent = "View Special Edition";
+        }
+        showingNosejob = !showingNosejob;
+      }
     }
 
     document.addEventListener("DOMContentLoaded", () => {
       const zoomedImage = document.getElementById("zoomedImage");
       zoomedImage.addEventListener("click", () => {
-        const overlay = document.getElementById("fullscreenOverlay");
-        const fullImg = document.getElementById("fullscreenImage");
-
-        fullImg.src = zoomedImage.src;
-        overlay.style.display = "flex";
+        zoomedImage.classList.toggle("fullscreen-zoom");
       });
     });
-
-    function closeFullscreen() {
-      document.getElementById("fullscreenOverlay").style.display = "none";
-    }
   </script>
 </body>
 </html>
