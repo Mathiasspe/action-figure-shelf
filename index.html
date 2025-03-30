@@ -198,12 +198,17 @@
       showingNosejob = !showingNosejob;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const zoomedImage = document.getElementById("zoomedImage");
-      zoomedImage.addEventListener("click", () => {
-        zoomedImage.classList.toggle("zoomed-in");
-      });
-    });
+   document.addEventListener("DOMContentLoaded", () => {
+  const zoomedImage = document.getElementById("zoomedImage");
+
+  zoomedImage.addEventListener("click", () => {
+    if (zoomedImage.classList.contains("fullscreen-zoom")) {
+      zoomedImage.classList.remove("fullscreen-zoom");
+    } else {
+      zoomedImage.classList.add("fullscreen-zoom");
+    }
+  });
+});
   </script>
 </body>
 </html>
