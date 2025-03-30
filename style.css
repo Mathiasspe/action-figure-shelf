@@ -54,7 +54,6 @@ h1 {
   color: #fff;
   margin: 8px 0 0 0;
   font-weight: bold;
-
 }
 
 .zoom-box {
@@ -71,27 +70,14 @@ h1 {
   max-height: 400px;
   border-radius: 10px;
   margin-top: 10px;
+  cursor: zoom-in;
+  transition: all 0.4s ease-in-out; /* Smooth zoom animation */
 }
 
 #zoomTitle {
   font-size: 1.5em;
   font-weight: bold;
   color: #fff;
-}
-
-.fullscreen-zoom {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(2);
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 30px #000;
-  max-width: 90vw;
-  max-height: 90vh;
-  cursor: zoom-out;
 }
 
 #zoomWrapper {
@@ -101,17 +87,19 @@ h1 {
   align-items: center;
 }
 
+/* Fullscreen-style zoom effect */
 .fullscreen-zoom {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1.8);
-  z-index: 999;
-  max-width: 90vw;
-  max-height: 90vh;
+  transform: translate(-50%, -50%) scale(2);
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 0 30px #000;
-  background-color: rgba(0,0,0,0.85);
-  padding: 10px;
+  max-width: 90vw;
+  max-height: 90vh;
+  cursor: zoom-out;
+  transition: all 0.4s ease-in-out; /* Animate zoom in/out */
 }
-
