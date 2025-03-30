@@ -25,11 +25,11 @@
     .container {
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: flex-start;
       padding: 20px;
       gap: 60px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: auto;
       flex-wrap: nowrap;
     }
@@ -38,8 +38,10 @@
       display: grid;
       grid-template-columns: 150px 150px;
       gap: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding-right: 10px;
     }
-
 
     .figure {
       background: transparent;
@@ -145,13 +147,17 @@
       <div class="figure" onclick="zoomImage('images/Petter_Viking.png', 'The Viking')">
         <img src="images/Petter_Viking.png" alt="The Viking"><p>The Viking</p>
       </div>
+      <div class="figure" onclick="zoomImage('images/The_destroyer.png', 'The Destroyer')">
+        <img src="images/The_destroyer.png" alt="The Destroyer"><p>The Destroyer</p>
+      </div>
       <div class="figure" onclick="zoomImage('images/Micke_action.png', 'The Micke')">
-        <img src="images/Micke_action.png" alt="The Micke"><p>The Destroyer</p>
+        <img src="images/Micke_action.png" alt="The Micke"><p>The Micke</p>
+      </div>
     </div>
     <div class="zoom-box" id="zoomBox">
       <p id="zoomTitle">Klikk for zoom!</p>
       <img id="zoomedImage" src="" alt="">
-      <button id="editionToggle" onclick="toggleEdition()">View Nosejob Edition</button>
+      <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
     </div>
   </div>
 
@@ -183,13 +189,13 @@
       const toggle = document.getElementById("editionToggle");
 
       if (!showingNosejob) {
-        img.src = "images/The_dad_Hospital.png";
+        img.src = "images/The_dad_Hospital.png"; // double-check spelling
         title.textContent = "The Dad: Nosejob Edition";
         toggle.textContent = "Back to original edition";
       } else {
         img.src = "images/car_vol2.png";
         title.textContent = "The Dad";
-        toggle.textContent = "View Nosejob Edition";
+        toggle.textContent = "View Special Edition";
       }
 
       showingNosejob = !showingNosejob;
