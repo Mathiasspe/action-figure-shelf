@@ -200,15 +200,11 @@
       showingNosejob = !showingNosejob;
     }
 
-   document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
   const zoomedImage = document.getElementById("zoomedImage");
 
   zoomedImage.addEventListener("click", () => {
-    if (zoomedImage.classList.contains("fullscreen-zoom")) {
-      zoomedImage.classList.remove("fullscreen-zoom");
-    } else {
-      zoomedImage.classList.add("fullscreen-zoom");
-    }
+    zoomedImage.classList.toggle("fullscreen-zoom");
   });
 });
   </script>
