@@ -4,19 +4,139 @@
   <meta charset="UTF-8">
   <title>Action Gutta</title>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #2e8ca9;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      margin: 20px 0;
+      font-family: 'Bangers', cursive;
+      letter-spacing: 2px;
+      color: #ffe600;
+      text-shadow: 3px 3px #000;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 60px;
+      padding: 40px;
+      flex-wrap: nowrap;
+    }
+
+    .shelf {
+      display: grid;
+      grid-template-columns: 150px 150px;
+      gap: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .figure {
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .figure:hover {
+      transform: scale(1.1);
+    }
+
+    .figure img {
+      width: 100%;
+      border-radius: 6px;
+      display: block;
+      border: none;
+      box-shadow: none;
+    }
+
+    .figure p {
+      color: #fff;
+      margin: 8px 0 0 0;
+      font-weight: bold;
+    }
+
+    .zoom-box {
+      background: #ffffff22;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .zoom-box img {
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: 10px;
+      margin-top: 10px;
+      cursor: zoom-in;
+      transition: all 0.4s ease-in-out;
+    }
+
+    #zoomTitle {
+      font-family: 'Bangers', cursive;
+      font-size: 1.8em;
+      font-weight: normal;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    #editionToggle {
+      margin-top: 15px;
+      background-color: #ffe600;
+      color: #000;
+      font-family: 'Bangers', cursive;
+      font-size: 1em;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #editionToggle:hover {
+      background-color: #fff34d;
+    }
+
+    .fullscreen-zoom {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #000;
+      max-width: 90vw;
+      max-height: 90vh;
+      cursor: zoom-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    #zoomWrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
 </head>
 <body>
   <h1>Action Gutta</h1>
   <div class="container">
-    <div class="zoom-box" id="zoomBox">
-      <p id="zoomTitle">Klikk for zoom!</p>
-      <div id="zoomWrapper">
-        <img id="zoomedImage" src="" alt="">
-      </div>
-      <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
-    </div>
-
     <div class="shelf">
       <div class="figure" onclick="zoomImage('images/Berg_action.png', 'The Wench')">
         <img src="images/Berg_action.png" alt="The Wench"><p>The Wench</p>
@@ -42,6 +162,14 @@
       <div class="figure" onclick="zoomImage('images/Micke_action.png', 'The Micke')">
         <img src="images/Micke_action.png" alt="The Micke"><p>The Micke</p>
       </div>
+    </div>
+
+    <div class="zoom-box" id="zoomBox">
+      <p id="zoomTitle">Klikk for zoom!</p>
+      <div id="zoomWrapper">
+        <img id="zoomedImage" src="" alt="">
+      </div>
+      <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
     </div>
   </div>
 
