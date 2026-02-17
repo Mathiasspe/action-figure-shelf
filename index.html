@@ -227,6 +227,15 @@
       letter-spacing: 1px;
     }
 
+    /* ── Mobile detail view ── */
+    .mobile-detail {
+      display: none;
+    }
+
+    .back-arrow {
+      display: none;
+    }
+
     /* ── Mobile layout ── */
     @media (max-width: 768px) {
       h1 {
@@ -249,20 +258,83 @@
         padding-right: 0;
       }
 
-      .zoom-box {
-        width: 100%;
-        max-width: 340px;
-        box-sizing: border-box;
-      }
-
-      .zoom-box img {
-        max-height: 300px;
-      }
-
+      /* Hide desktop zoom-box and info-box on mobile */
+      .zoom-box,
       .info-box {
+        display: none !important;
+      }
+
+      /* Mobile detail view */
+      .mobile-detail {
+        display: none;
+        flex-direction: column;
+        align-items: center;
         width: 100%;
-        max-width: 340px;
+        max-width: 380px;
+        gap: 16px;
+      }
+
+      .mobile-detail.active {
+        display: flex;
+      }
+
+      /* When detail is active, hide the shelf */
+      .shelf.hidden {
+        display: none;
+      }
+
+      .back-arrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        align-self: flex-start;
+        background: none;
+        border: none;
+        color: #ffe600;
+        font-family: 'Bangers', cursive;
+        font-size: 1.3em;
+        cursor: pointer;
+        padding: 4px 0;
+        letter-spacing: 1px;
+      }
+
+      .back-arrow:hover {
+        color: #fff;
+      }
+
+      .mobile-detail .mobile-zoom-img {
+        width: 100%;
+        max-height: 45vh;
+        object-fit: contain;
+        border-radius: 10px;
+      }
+
+      .mobile-detail .mobile-title {
+        font-family: 'Bangers', cursive;
+        font-size: 1.8em;
+        color: #fff;
+        margin: 0;
+      }
+
+      .mobile-detail .mobile-stats {
+        background: #ffffff22;
+        border-radius: 12px;
+        padding: 16px;
+        width: 100%;
         box-sizing: border-box;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      }
+
+      .mobile-detail .mobile-edition-btn {
+        background-color: #ffe600;
+        color: #000;
+        font-family: 'Bangers', cursive;
+        font-size: 1em;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: none;
       }
 
       .stat-label {
@@ -325,6 +397,21 @@
         <span class="move-name" id="specialMoveName"></span>
       </div>
     </div>
+
+    <!-- Mobile detail view (hidden on desktop) -->
+    <div class="mobile-detail" id="mobileDetail">
+      <button class="back-arrow" onclick="closeMobileDetail()">&#8592; Back</button>
+      <p class="mobile-title" id="mobileTitle"></p>
+      <img class="mobile-zoom-img" id="mobileZoomImg" src="" alt="">
+      <button class="mobile-edition-btn" id="mobileEditionToggle" onclick="toggleEdition()">View Special Edition</button>
+      <div class="mobile-stats">
+        <div class="stats-container" id="mobileStatsContainer"></div>
+        <div class="special-move" id="mobileSpecialMove">
+          <span class="label">SPECIAL MOVE</span>
+          <span class="move-name" id="mobileSpecialMoveName"></span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -378,17 +465,13 @@
       Party: "color-party"
     };
 
-    function renderStats(title) {
+    function isMobile() {
+      return window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function buildStatsHTML(title) {
       const data = characterStats[title];
-      const container = document.getElementById("statsContainer");
-      const specialEl = document.getElementById("specialMoveName");
-
-      if (!data) {
-        container.innerHTML = "";
-        specialEl.textContent = "";
-        return;
-      }
-
+      if (!data) return "";
       let html = "";
       for (const [stat, value] of Object.entries(data.stats)) {
         const colorClass = statColors[stat];
@@ -404,45 +487,95 @@
         }
         html += '</div></div>';
       }
-      container.innerHTML = html;
-      specialEl.textContent = data.special;
+      return html;
+    }
+
+    function renderStats(title) {
+      const data = characterStats[title];
+      const html = buildStatsHTML(title);
+
+      // Desktop
+      document.getElementById("statsContainer").innerHTML = html;
+      document.getElementById("specialMoveName").textContent = data ? data.special : "";
+
+      // Mobile
+      document.getElementById("mobileStatsContainer").innerHTML = html;
+      document.getElementById("mobileSpecialMoveName").textContent = data ? data.special : "";
     }
 
     function zoomImage(src, title) {
-      const img = document.getElementById("zoomedImage");
-      const toggle = document.getElementById("editionToggle");
-
-      img.classList.remove("fullscreen-zoom");
-      img.src = src;
-      document.getElementById("zoomTitle").textContent = title;
-      document.getElementById("infoTitle").textContent = title;
-      document.getElementById("infoBox").style.display = "block";
-      renderStats(title);
       currentFigure = title;
       showingNosejob = false;
 
-      if (title === "The Dad" || title === "The Viking") {
-        toggle.style.display = "inline-block";
-        toggle.textContent = "View Special Edition";
+      if (isMobile()) {
+        // Show mobile detail view, hide shelf
+        document.querySelector(".shelf").classList.add("hidden");
+        const detail = document.getElementById("mobileDetail");
+        detail.classList.add("active");
+
+        document.getElementById("mobileTitle").textContent = title;
+        document.getElementById("mobileZoomImg").src = src;
+
+        const mobileToggle = document.getElementById("mobileEditionToggle");
+        if (title === "The Dad" || title === "The Viking") {
+          mobileToggle.style.display = "inline-block";
+          mobileToggle.textContent = "View Special Edition";
+        } else {
+          mobileToggle.style.display = "none";
+        }
+
+        renderStats(title);
+        window.scrollTo(0, 0);
       } else {
-        toggle.style.display = "none";
+        // Desktop behavior
+        const img = document.getElementById("zoomedImage");
+        const toggle = document.getElementById("editionToggle");
+
+        img.classList.remove("fullscreen-zoom");
+        img.src = src;
+        document.getElementById("zoomTitle").textContent = title;
+        document.getElementById("infoTitle").textContent = title;
+        document.getElementById("infoBox").style.display = "block";
+        renderStats(title);
+
+        if (title === "The Dad" || title === "The Viking") {
+          toggle.style.display = "inline-block";
+          toggle.textContent = "View Special Edition";
+        } else {
+          toggle.style.display = "none";
+        }
       }
+    }
+
+    function closeMobileDetail() {
+      document.querySelector(".shelf").classList.remove("hidden");
+      document.getElementById("mobileDetail").classList.remove("active");
+      window.scrollTo(0, 0);
     }
 
     function toggleEdition() {
       const img = document.getElementById("zoomedImage");
+      const mobileImg = document.getElementById("mobileZoomImg");
       const title = document.getElementById("zoomTitle");
+      const mobileTitle = document.getElementById("mobileTitle");
       const toggle = document.getElementById("editionToggle");
+      const mobileToggle = document.getElementById("mobileEditionToggle");
 
       if (currentFigure === "The Dad") {
         if (!showingNosejob) {
           img.src = "images/The_dad_Hospital.png";
+          mobileImg.src = "images/The_dad_Hospital.png";
           title.textContent = "The Dad: Nosejob Edition";
+          mobileTitle.textContent = "The Dad: Nosejob Edition";
           toggle.textContent = "Back to original edition";
+          mobileToggle.textContent = "Back to original edition";
         } else {
           img.src = "images/car_vol2.png";
+          mobileImg.src = "images/car_vol2.png";
           title.textContent = "The Dad";
+          mobileTitle.textContent = "The Dad";
           toggle.textContent = "View Special Edition";
+          mobileToggle.textContent = "View Special Edition";
         }
         showingNosejob = !showingNosejob;
       }
@@ -450,12 +583,18 @@
       else if (currentFigure === "The Viking") {
         if (!showingNosejob) {
           img.src = "images/Petter_Marbz.png";
+          mobileImg.src = "images/Petter_Marbz.png";
           title.textContent = "The Viking: Marbz Edition";
+          mobileTitle.textContent = "The Viking: Marbz Edition";
           toggle.textContent = "Back to original edition";
+          mobileToggle.textContent = "Back to original edition";
         } else {
           img.src = "images/Petter_Viking.png";
+          mobileImg.src = "images/Petter_Viking.png";
           title.textContent = "The Viking";
+          mobileTitle.textContent = "The Viking";
           toggle.textContent = "View Special Edition";
+          mobileToggle.textContent = "View Special Edition";
         }
         showingNosejob = !showingNosejob;
       }
