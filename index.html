@@ -424,6 +424,73 @@
       .fullscreen-zoom {
         transform: translate(-50%, -50%) scale(1.4);
       }
+
+      /* ── Mobile swipe navigation ── */
+      .mobile-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .mobile-nav-btn {
+        background: #ffffff22;
+        border: none;
+        color: #ffe600;
+        font-family: 'Bangers', cursive;
+        font-size: 1.8em;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
+
+      .mobile-nav-btn:active {
+        background: #ffffff44;
+      }
+
+      .figure-counter {
+        font-family: 'Bangers', cursive;
+        font-size: 1em;
+        color: #ffe600;
+        letter-spacing: 1px;
+      }
+
+      .mobile-detail .mobile-img-wrapper {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .mobile-detail .mobile-zoom-img {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .mobile-detail .mobile-zoom-img.slide-out-left {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+
+      .mobile-detail .mobile-zoom-img.slide-out-right {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      .mobile-detail .mobile-zoom-img.slide-in-left {
+        transform: translateX(100%);
+        opacity: 0;
+        transition: none;
+      }
+
+      .mobile-detail .mobile-zoom-img.slide-in-right {
+        transform: translateX(-100%);
+        opacity: 0;
+        transition: none;
+      }
     }
   </style>
 </head>
@@ -486,7 +553,14 @@
     <div class="mobile-detail" id="mobileDetail">
       <button class="back-arrow" onclick="closeMobileDetail()">&#8592; Back</button>
       <p class="mobile-title" id="mobileTitle"></p>
-      <img class="mobile-zoom-img" id="mobileZoomImg" src="" alt="">
+      <div class="mobile-img-wrapper">
+        <img class="mobile-zoom-img" id="mobileZoomImg" src="" alt="">
+      </div>
+      <div class="mobile-nav">
+        <button class="mobile-nav-btn" onclick="navigateFigure(-1)">&#8249;</button>
+        <span class="figure-counter" id="figureCounter"></span>
+        <button class="mobile-nav-btn" onclick="navigateFigure(1)">&#8250;</button>
+      </div>
       <button class="mobile-edition-btn" id="mobileEditionToggle" onclick="toggleEdition()">View Special Edition</button>
       <div class="mobile-stats">
         <div class="stats-container" id="mobileStatsContainer"></div>
@@ -501,6 +575,20 @@
   <script>
     let showingNosejob = false;
     let currentFigure = "";
+    let currentIndex = 0;
+
+    // Ordered list matching the shelf layout
+    const figures = [
+      { src: "images/Berg_action.png", title: "The Wench" },
+      { src: "images/car_vol2.png", title: "The Dad" },
+      { src: "images/Henke_action.png", title: "The Bulge" },
+      { src: "images/KNut_action.png", title: "The Klut" },
+      { src: "images/Morsund_action.png", title: "The Grinder" },
+      { src: "images/The_analyst_Hasse.png", title: "The Analyst" },
+      { src: "images/Petter_Viking.png", title: "The Viking" },
+      { src: "images/Micke_action.png", title: "The Micke" },
+      { src: "images/Mikkel_action.png", title: "The Photographer" }
+    ];
 
     const characterStats = {
       "The Wench": {
@@ -587,9 +675,17 @@
       document.getElementById("mobileSpecialMoveName").textContent = data ? data.special : "";
     }
 
+    function updateFigureCounter() {
+      document.getElementById("figureCounter").textContent = (currentIndex + 1) + " / " + figures.length;
+    }
+
     function zoomImage(src, title) {
       currentFigure = title;
       showingNosejob = false;
+
+      // Find index from title
+      const idx = figures.findIndex(f => f.title === title);
+      if (idx !== -1) currentIndex = idx;
 
       if (isMobile()) {
         // Show mobile detail view, hide shelf
@@ -599,6 +695,7 @@
 
         document.getElementById("mobileTitle").textContent = title;
         document.getElementById("mobileZoomImg").src = src;
+        updateFigureCounter();
 
         const mobileToggle = document.getElementById("mobileEditionToggle");
         if (title === "The Dad" || title === "The Viking") {
@@ -683,6 +780,77 @@
         showingNosejob = !showingNosejob;
       }
     }
+
+    let isNavigating = false;
+
+    function navigateFigure(direction) {
+      if (isNavigating) return;
+      const newIndex = currentIndex + direction;
+      if (newIndex < 0 || newIndex >= figures.length) return;
+
+      isNavigating = true;
+      const img = document.getElementById("mobileZoomImg");
+      const slideOutClass = direction > 0 ? "slide-out-left" : "slide-out-right";
+      const slideInClass = direction > 0 ? "slide-in-left" : "slide-in-right";
+
+      // Slide current image out
+      img.classList.add(slideOutClass);
+
+      setTimeout(() => {
+        // Update to new figure
+        currentIndex = newIndex;
+        const fig = figures[currentIndex];
+        currentFigure = fig.title;
+        showingNosejob = false;
+
+        img.src = fig.src;
+        document.getElementById("mobileTitle").textContent = fig.title;
+        updateFigureCounter();
+        renderStats(fig.title);
+
+        const mobileToggle = document.getElementById("mobileEditionToggle");
+        if (fig.title === "The Dad" || fig.title === "The Viking") {
+          mobileToggle.style.display = "inline-block";
+          mobileToggle.textContent = "View Special Edition";
+        } else {
+          mobileToggle.style.display = "none";
+        }
+
+        // Position for slide-in
+        img.classList.remove(slideOutClass);
+        img.classList.add(slideInClass);
+
+        // Trigger reflow then animate in
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            img.classList.remove(slideInClass);
+            setTimeout(() => { isNavigating = false; }, 300);
+          });
+        });
+      }, 300);
+    }
+
+    // Touch swipe detection for mobile detail view
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const detail = document.getElementById("mobileDetail");
+
+      detail.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+      }, { passive: true });
+
+      detail.addEventListener("touchend", (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        // Only trigger if horizontal swipe is dominant and > 50px
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          navigateFigure(dx < 0 ? 1 : -1);
+        }
+      }, { passive: true });
+    });
 
     document.addEventListener("DOMContentLoaded", () => {
       const zoomedImage = document.getElementById("zoomedImage");
