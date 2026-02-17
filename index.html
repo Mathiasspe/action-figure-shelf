@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: sans-serif;
-      background: red;
+      background: #2e8ca9;
       color: white;
       margin: 0;
       padding: 0;
@@ -128,6 +128,30 @@
       justify-content: center;
       align-items: center;
     }
+
+    .info-box {
+      background: #ffffff22;
+      border-radius: 12px;
+      padding: 20px;
+      width: 250px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: none;
+    }
+
+    .info-box h2 {
+      font-family: 'Bangers', cursive;
+      font-size: 1.5em;
+      color: #ffe600;
+      text-shadow: 2px 2px #000;
+      margin: 0 0 10px 0;
+    }
+
+    .info-box p {
+      color: #fff;
+      font-size: 0.95em;
+      line-height: 1.5;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -170,6 +194,11 @@
       </div>
       <button id="editionToggle" onclick="toggleEdition()">View Special Edition</button>
     </div>
+
+    <div class="info-box" id="infoBox">
+      <h2 id="infoTitle"></h2>
+      <p id="infoText">Description coming soon...</p>
+    </div>
   </div>
 
   <script>
@@ -183,6 +212,8 @@
       img.classList.remove("fullscreen-zoom");
       img.src = src;
       document.getElementById("zoomTitle").textContent = title;
+      document.getElementById("infoTitle").textContent = title;
+      document.getElementById("infoBox").style.display = "block";
       currentFigure = title;
       showingNosejob = false;
 
