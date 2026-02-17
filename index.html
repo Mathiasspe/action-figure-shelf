@@ -12,6 +12,85 @@
       color: white;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* ── Animated background layers ── */
+    .bg-halftone {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    .bg-action-lines {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: repeating-conic-gradient(
+        from 0deg at 50% 120%,
+        rgba(255,255,255,0.02) 0deg 5deg,
+        transparent 5deg 10deg
+      );
+    }
+
+    .bg-stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle var(--dur) ease-in-out infinite var(--delay);
+    }
+
+    .star.large {
+      width: 5px;
+      height: 5px;
+      border-radius: 0;
+      clip-path: polygon(
+        50% 0%, 61% 35%, 98% 35%, 68% 57%,
+        79% 91%, 50% 70%, 21% 91%, 32% 57%,
+        2% 35%, 39% 35%
+      );
+      background: #ffe600;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 0.8; transform: scale(1); }
+    }
+
+    @keyframes float-up {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.7; }
+      100% { transform: translateY(-100vh) rotate(180deg); opacity: 0; }
+    }
+
+    .star.floating {
+      animation: float-up var(--dur) linear infinite var(--delay);
+      opacity: 0.5;
+      top: 100%;
+    }
+
+    /* All page content sits above backgrounds */
+    h1, .container {
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
@@ -349,6 +428,11 @@
   </style>
 </head>
 <body>
+  <!-- Animated background -->
+  <div class="bg-halftone"></div>
+  <div class="bg-action-lines"></div>
+  <div class="bg-stars" id="bgStars"></div>
+
   <h1>Action Gutta</h1>
   <div class="container">
     <div class="shelf">
@@ -605,6 +689,20 @@
       zoomedImage.addEventListener("click", () => {
         zoomedImage.classList.toggle("fullscreen-zoom");
       });
+
+      // Spawn background stars
+      const starContainer = document.getElementById("bgStars");
+      for (let i = 0; i < 40; i++) {
+        const star = document.createElement("div");
+        const isLarge = Math.random() < 0.2;
+        const isFloating = Math.random() < 0.3;
+        star.className = "star" + (isLarge ? " large" : "") + (isFloating ? " floating" : "");
+        star.style.left = Math.random() * 100 + "%";
+        star.style.top = isFloating ? "100%" : Math.random() * 100 + "%";
+        star.style.setProperty("--dur", (4 + Math.random() * 8) + "s");
+        star.style.setProperty("--delay", (Math.random() * 6) + "s");
+        starContainer.appendChild(star);
+      }
     });
   </script>
 </body>
